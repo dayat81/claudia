@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover } from "@/components/ui/popover";
 import { api, type Session } from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn, isTauri } from "@/lib/utils";
 import { open } from "@tauri-apps/plugin-dialog";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";
 import { StreamMessage } from "./StreamMessage";
@@ -196,13 +196,18 @@ export const ClaudeCodeSession: React.FC<ClaudeCodeSessionProps> = ({
   };
 
   const handleSelectPath = async () => {
+    if (!isTauri()) {
+      setError("Directory selection is only available in the desktop app.");
+      return;
+    }
+
     try {
       const selected = await open({
         directory: true,
         multiple: false,
         title: "Select Project Directory"
       });
-      
+
       if (selected) {
         setProjectPath(selected as string);
         setError(null);

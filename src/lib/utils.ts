@@ -14,4 +14,15 @@ import { twMerge } from "tailwind-merge";
  */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-} 
+}
+
+/**
+ * Detects if the code is running inside a Tauri environment.
+ *
+ * When the frontend is served standalone (e.g. with `bun run dev`) the
+ * `window.__TAURI__` global is not available and calling Tauri APIs will
+ * result in errors like `Cannot read properties of undefined (reading 'invoke')`.
+ */
+export function isTauri(): boolean {
+  return typeof window !== "undefined" && Boolean((window as any).__TAURI__);
+}
