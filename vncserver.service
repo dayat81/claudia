@@ -1,0 +1,15 @@
+[Unit]
+Description=VNC Desktop Server with XFCE
+After=network.target
+
+[Service]
+Type=forking
+User=pt
+WorkingDirectory=/home/pt
+ExecStart=/home/pt/claudia/start-desktop-vnc.sh
+ExecStop=/bin/bash -c 'pkill -f "Xvnc.*:3" || true'
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
